@@ -1,42 +1,38 @@
-import * as fs from 'fs';
-import { FolderTree, FileTree } from './folderParser';
+import * as path from 'path';
+import { FolderTree, FileTree } from './parser';
 
-const FILE_SEPARATOR = '===============================\n';
-
-export function generateStructuredText(projectStructure: FolderTree): string {
-  let structuredText = '';
-
-  structuredText += generateFolderStructure(projectStructure, '');
-  structuredText += generateFilePathsAndContents(projectStructure, '');
-
-  return structuredText;
+export function generateStructuredText(projectStructure: FolderTree | FileTree, projectPath: string): string {
+    let structureText = generateTreeStructure(projectStructure, '', projectPath);
+    let filesText = generateFilesContent(projectStructure, projectPath);
+    return structureText + filesText;
 }
 
-function generateFolderStructure(node: FolderTree | FileTree, indent: string): string {
-  if ('children' in node) {
-    let structure = `${indent}📁 ${node.name}\n`;
-
-    for (const child of node.children) {
-      structure += generateFolderStructure(child, indent + '  ');
-    }
-
-    return structure;
-  }
-
-  return '';
-}
-
-function generateFilePathsAndContents(node: FolderTree | FileTree, indent: string): string {
-  if ('children' in node) {
+function generateTreeStructure(node: FolderTree | FileTree, indent: string, projectPath: string): string {
     let structure = '';
-
-    for (const child of node.children) {
-      structure += generateFilePathsAndContents(child, indent);
+    if (isFolder(node)) {
+        structure += `${indent}📁 ${node.name}\n`;
+        for (const child of node.children) {
+            structure += generateTreeStructure(child, indent + '  ', projectPath);
+        }
+    } else {
+        structure += `${indent}📄 ${node.name}\n`;
     }
-
     return structure;
-  } else {
-    const fileContent = fs.readFileSync(node.path, 'utf-8');
-    return `${FILE_SEPARATOR}${indent}📄 ${node.name}\nPath: ${node.path}\nContent:\n${fileContent.trim()}\n\n`;
-  }
+}
+
+function generateFilesContent(node: FolderTree | FileTree, projectPath: string): string {
+    let content = '';
+    if (isFolder(node)) {
+        for (const child of node.children) {
+            content += generateFilesContent(child, projectPath);
+        }
+    } else {
+        const relativePath = path.relative(projectPath, node.path);
+        content += `Path: ${relativePath}\nContent:\n${node.content.trim()}\n\n`;
+    }
+    return content;
+}
+
+function isFolder(node: FolderTree | FileTree): node is FolderTree {
+    return (node as FolderTree).children !== undefined;
 }

@@ -15,16 +15,15 @@
   "contributes": {
     "commands": [
       {
-        "command": "c2text.parseSelectedFolder",
+        "command": "c2text.parseSelected",
         "title": "Parse with C2Text"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "c2text.parseSelectedFolder",
-          "group": "c2text",
-          "when": "explorerResourceIsFolder"
+          "command": "c2text.parseSelected",
+          "group": "c2text"
         }
       ]
     }
