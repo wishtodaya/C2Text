@@ -1,23 +1,33 @@
 {
   "name": "c2text",
   "displayName": "C2Text",
-  "description": "A VSCode extension to parse folder structure and file contents.",
-  "version": "0.0.1",
+  "description": "A VSCode extension to parse selected files and folders and generate structured text.",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.89.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "c2text.parseFolder",
-        "title": "Parse Folder"
+        "command": "c2text.parseSelectedFolder",
+        "title": "Parse with C2Text"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "c2text.parseSelectedFolder",
+          "group": "c2text",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
