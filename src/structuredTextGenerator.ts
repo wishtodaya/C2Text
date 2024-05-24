@@ -28,7 +28,9 @@ function generateFilesContent(node: FolderTree | FileTree, projectPath: string):
         }
     } else {
         const relativePath = path.relative(projectPath, node.path);
-        content += `Path: ${relativePath}\nContent:\n${node.content.trim()}\n\n`;
+        content += `\n===== File: ${relativePath} =====\n`;
+        content += `${node.content.trim()}\n`;
+        content += `===== End of File: ${relativePath} =====\n\n`;
     }
     return content;
 }
