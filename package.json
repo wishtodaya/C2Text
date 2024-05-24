@@ -3,6 +3,7 @@
   "displayName": "C2Text",
   "description": "A VSCode extension to parse selected files and folders and generate structured text.",
   "version": "1.0.0",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.89.0"
   },
