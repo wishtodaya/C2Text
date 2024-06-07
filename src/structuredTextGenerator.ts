@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { FolderTree, FileTree } from './parser';
+import { isFolder } from './utils';
 
 export function generateStructuredText(projectStructure: FolderTree | FileTree, projectPath: string): string {
     let structureText = generateTreeStructure(projectStructure, '', projectPath);
@@ -33,8 +34,4 @@ function generateFilesContent(node: FolderTree | FileTree, projectPath: string):
         content += `===== End of File: ${relativePath} =====\n\n`;
     }
     return content;
-}
-
-function isFolder(node: FolderTree | FileTree): node is FolderTree {
-    return (node as FolderTree).children !== undefined;
 }

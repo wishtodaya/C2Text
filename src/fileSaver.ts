@@ -5,5 +5,10 @@ export async function saveToFile(content: string, projectPath: string): Promise<
     const outputPath = fs.lstatSync(projectPath).isDirectory()
         ? path.join(projectPath, 'c2text_output.txt')
         : path.join(path.dirname(projectPath), 'c2text_output.txt');
-    await fs.promises.writeFile(outputPath, content, 'utf-8');
+    try {
+        await fs.promises.writeFile(outputPath, content, 'utf-8');
+    } catch (error) {
+        console.error('Error saving structured text to file:', error);
+        throw error;
+    }
 }
